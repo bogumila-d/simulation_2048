@@ -93,8 +93,9 @@ def parse_args(argv):
 
 def main(argv):
     args = parse_args(argv)
+    length = 10
 
-    for i in range(2):
+    for i in range(length):
         run_game(args)
 
     scores = sum(statistics) / len(statistics)
@@ -105,7 +106,13 @@ def main(argv):
     print("LENGTH: ", len(statistics))
     print("MAX SCORE: ", max(statistics))
     print("Min SCORE: ", min(statistics))
-    print("Win quote: ", list(points).count('2048'))
+    print("Win quote: ")
+    print("4096: ", list(points).count(4096))
+    print("4096: ", str(list(points).count(4096)/length * 100) + "%")
+    print("2048: ", list(points).count(2048))
+    print("2048: ", str(list(points).count(2048)/length * 100) + "%")
+    print("1024: ", list(points).count(1024))
+    print("1024: ", str(list(points).count(1024)/length * 100) + "%")
 
     # if args.browser == 'firefox':
     #     from ffctrl import FirefoxRemoteControl
