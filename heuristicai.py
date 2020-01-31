@@ -103,14 +103,16 @@ def check_corner(board, maximum):
     val_left_top = board[0][0]
     val_left_sec = board[1][0]
     val_top_sec = board[0][1]
-    return val_left_top == 0 or val_top_sec == 0 or val_left_sec == 0 or val_left_top * 2 <= maximum
+    return val_left_top == 0 or val_top_sec == 0 or \
+           val_left_sec == 0 or val_left_top * 2 <= maximum
 
 
 def check_first_column(board, maximum):
     val_left_top = board[0][0]
     val_left_sec = board[1][0]
     val_left_third = board[2][0]
-    return val_left_top == maximum and val_left_sec * 2 >= maximum and val_left_third * 4 >= maximum
+    return val_left_top == maximum and \
+           val_left_sec * 2 >= maximum and val_left_third * 4 >= maximum
 
 
 def check_row_result(board, result):

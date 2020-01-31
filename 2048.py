@@ -93,7 +93,7 @@ def parse_args(argv):
 
 def main(argv):
     args = parse_args(argv)
-    length = 10
+    length = 20
 
     for i in range(length):
         run_game(args)
@@ -108,37 +108,11 @@ def main(argv):
     print("Min SCORE: ", min(statistics))
     print("Win quote: ")
     print("4096: ", list(points).count(4096))
-    print("4096: ", str(list(points).count(4096)/length * 100) + "%")
+    print("4096: ", str(list(points).count(4096)/length * 100) + " %")
     print("2048: ", list(points).count(2048))
-    print("2048: ", str(list(points).count(2048)/length * 100) + "%")
+    print("2048: ", str(list(points).count(2048)/length * 100) + " %")
     print("1024: ", list(points).count(1024))
-    print("1024: ", str(list(points).count(1024)/length * 100) + "%")
-
-    # if args.browser == 'firefox':
-    #     from ffctrl import FirefoxRemoteControl
-    #     if args.port is None:
-    #         args.port = 32000
-    #     ctrl = FirefoxRemoteControl(args.port)
-    # elif args.browser == 'chrome':
-    #     from chromectrl import ChromeDebuggerControl
-    #     if args.port is None:
-    #         args.port = 9222
-    #     ctrl = ChromeDebuggerControl(args.port)
-    #
-    # if args.ctrlmode == 'keyboard':
-    #     from gamectrl import Keyboard2048Control
-    #     gamectrl = Keyboard2048Control(ctrl)
-    # elif args.ctrlmode == 'fast':
-    #     from gamectrl import Fast2048Control
-    #     gamectrl = Fast2048Control(ctrl)
-    # elif args.ctrlmode == 'hybrid':
-    #     from gamectrl import Hybrid2048Control
-    #     gamectrl = Hybrid2048Control(ctrl)
-    #
-    # if gamectrl.get_status() == 'ended':
-    #     gamectrl.restart_game()
-    #
-    # play_game(gamectrl)
+    print("1024: ", str(list(points).count(1024)/length * 100) + " %")
 
 
 def run_game(args):

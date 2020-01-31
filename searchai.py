@@ -2,6 +2,8 @@
 import game
 import sys
 import numpy as np
+import heuristicai as h
+
 
 # Author:      chrn (original by nneonneo)
 # Date:        11.11.2016
@@ -37,7 +39,12 @@ def score_toplevel_move(move, board, depth=0):
     # TODO:
     # Implement the Expectimax Algorithm.
     # 1.) Start the recursion until it reach a certain depth
-    if depth < 1:
+    if count_zeros_in_board(newboard) < 4:
+        dyn_depth = 2
+    else:
+        dyn_depth = 1
+
+    if depth < dyn_depth:
         depth += 1
         score = 0
         # 2.) When you don't reach the last depth, get all possible board states and
@@ -49,10 +56,13 @@ def score_toplevel_move(move, board, depth=0):
                     score += get_score_wight(newboard, row, col, depth, 2)
                     score += get_score_wight(newboard, row, col, depth, 4)
                     newboard[row][col] = 0
-        return score
+        return score / count_zeros_in_board(newboard)
     # 3.) When you reach the leaf calculate the board score with your heuristic.
     else:
-        return count_zeros_in_board(newboard) * (get_sorted_score(newboard) * heuristic_first_row(newboard))
+        if count_zeros_in_board(newboard) > 0:
+            return count_zeros_in_board(newboard) * (score_monotonicity(newboard) * first_row_bonus(newboard))
+        else:
+            return corner_shockwave(board) + (score_monotonicity(newboard) * first_row_bonus(newboard))
 
 
 def get_score_wight(newboard, row, col, depth, num):
@@ -92,7 +102,7 @@ def board_equals(board, newboard):
     return (newboard == board).all()
 
 
-def heuristic_first_row(board):
+def first_row_bonus(board):
     factor = 1
     first = board[0][0]
     second = board[0][1]
@@ -110,11 +120,14 @@ def heuristic_first_row(board):
     return factor
 
 
-def get_sorted_score(board):
+# check if values of the tiles are all either increasing or
+# decreasing along both the left/right and up/down directions
+def score_monotonicity(board):
     factor = 1
     new_board = np.copy(board)
     length = len(new_board)
 
+    # sort right highest to left lowest
     for i in range(length):
         new_board[i][::-1].sort()
 
@@ -122,6 +135,7 @@ def get_sorted_score(board):
         if row_equals(new_board[i], board[i]):
             factor += 1
 
+    # sort left lowest to right highest
     for i in range(length):
         new_board[i].sort()
 
@@ -130,20 +144,32 @@ def get_sorted_score(board):
             factor += 1
 
     for i in range(length):
-        new_board[:, i].sort()
+        new_board.T[i].sort()
 
+    # sort down highest to up lowest
     for i in range(length):
-        if row_equals(new_board[:, i], board[:, i]):
+        if row_equals(new_board.T[i], board.T[i]):
             factor += 1
 
     for i in range(length):
-        new_board[:, i][::-1].sort()
+        new_board.T[i][::-1].sort()
 
+    # sort up highest to down lowest
     for i in range(length):
-        if row_equals(new_board[:, i], board[:, i]):
+        if row_equals(new_board.T[i], board.T[i]):
             factor += 1
 
     return factor
+
+
+def corner_shockwave(board):
+    board = np.copy(board)
+    weight = [1000, 900, 700, 500
+            , 800, 700, 500, 200
+            , 700, 500, 200, 30
+            , 500, 200, 30, 0]
+    board = board.ravel()
+    return np.sum(np.array(board) * np.array(weight))
 
 
 def row_equals(row, new_row):
